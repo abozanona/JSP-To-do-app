@@ -86,9 +86,10 @@ public class ToDOListServlet extends HttpServlet {
 		}
 		Ticket ticket = new Ticket(0, value, isChecked);
 		try {
-			mTicketDBUtil.addTicket(ticket);
+			int lastInsertedId = mTicketDBUtil.addTicket(ticket);
 			output = new JSONObject();
 			output.put("success", true);
+			output.put("id", lastInsertedId);
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();

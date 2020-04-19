@@ -42,7 +42,8 @@ public class TicketDBUtil {
 		}
 	}
 
-	public void addTicket(Ticket ticket)throws Exception {
+	public int addTicket(Ticket ticket)throws Exception {
+		int lastInsertedId = 0;
 		Connection myConn = null;
 		Statement myStmt = null;
 		PreparedStatement ps  = null;
@@ -55,10 +56,17 @@ public class TicketDBUtil {
 			ps.setString(1, ticket.getValue());
 			ps.setBoolean(2, ticket.isChecked());
 			int res = ps.executeUpdate();
+			
+			myStmt = myConn.createStatement();
+			myRs = myStmt.executeQuery("select * from TICKET");
+            if(myRs.last()){
+            	lastInsertedId = myRs.getInt("id");
+            }
 		}
 		finally {
 			close(myConn, myStmt, myRs);
 		}
+		return lastInsertedId;
 	}
 
 	public void updateTicketChecked(int ticketId, boolean isChecked) throws Exception {
@@ -69,7 +77,7 @@ public class TicketDBUtil {
 		try {
 			myConn = mDataSource.getConnection();
 			
-			String sql = "UPDATE TICKET set is_checked = ? WHEER id = ?";
+			String sql = "UPDATE TICKET set is_checked = ? WHERE id = ?";
 			ps = myConn.prepareStatement(sql);
 			ps.setBoolean(1, isChecked);
 			ps.setInt(2, ticketId);
