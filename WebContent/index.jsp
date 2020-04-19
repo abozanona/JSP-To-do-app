@@ -31,7 +31,7 @@
 	                                    <li class="${ticket.isChecked()? "completed":""}">
 	                                        <div class="form-check">
 												<label class="form-check-label">
-													<input class="checkbox" type="checkbox">
+													<input class="checkbox" type="checkbox" data-id="${ticket.id}">
 													${ticket.value}
 													<i class="input-helper"></i>
 												</label>
